@@ -6,7 +6,7 @@ fn find_first_largest_digit(line: &str) -> (i32, i32) {
     let mut ret_ind = 0;
     for digit in line.chars() {
         let digit_num: i32 = digit.to_digit(10).unwrap() as i32;
-        if digit_num > largest_digit {
+        if digit_num > largest_digit && line.chars().nth(ind as usize + 1) != None {
             largest_digit = digit_num;
             ret_ind = ind;
         }
@@ -26,7 +26,7 @@ fn find_second_largest_digit(line: &str, start_index: i32) -> i32 {
 }
 
 pub fn run() {
-    let input = fs::read_to_string("inputs/day03_test.txt").expect("Failed to read input file");
+    let input = fs::read_to_string("inputs/day03.txt").expect("Failed to read input file");
     let mut p1 = 0;
     let mut p2 = 0;
     for line in input.lines() {
