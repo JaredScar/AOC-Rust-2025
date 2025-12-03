@@ -25,6 +25,27 @@ fn find_second_largest_digit(line: &str, start_index: i32) -> i32 {
     return largest_digit;
 }
 
+fn find_largest_possible_digit(line: &str, digits: i32) -> String {
+    let mut largest_possible_digit = String::new();
+    let mut last_ind = 0;
+    let mut digits_remaining = digits - 1;
+    while largest_possible_digit.len() < digits as usize {
+        let mut ind = last_ind;
+        let mut last_largest_digit = 0;
+        for digit in line[(last_ind) as usize..].chars() {
+            let digit_num: i32 = digit.to_digit(10).unwrap() as i32;
+            if digit_num > last_largest_digit && line.chars().nth( (ind + digits_remaining) as usize) != None {
+                last_ind = ind + 1;
+                last_largest_digit = digit_num;
+            }
+            ind += 1;
+        }
+        largest_possible_digit.push(last_largest_digit.to_string().chars().next().unwrap());
+        digits_remaining -= 1;
+    }
+    return largest_possible_digit;
+}
+
 pub fn run() {
     let input = fs::read_to_string("inputs/day03.txt").expect("Failed to read input file");
     let mut p1 = 0;
@@ -38,8 +59,12 @@ pub fn run() {
         let second_largest_digit = find_second_largest_digit(line, first_largest_digit_index);
         let num_str = first_largest_digit.to_string() + &second_largest_digit.to_string();
         let num: i32 = num_str.parse().unwrap();
-        println!("Num: {}", num);
         p1 += num;
+
+        // Now we need to turn on 12 batteries to make the largest possible digit
+        let largest_possible_digit = find_largest_possible_digit(line, 12);
+        println!("Largest possible digit: {}", largest_possible_digit);
+        p2 += largest_possible_digit.parse::<i64>().unwrap();
     }
     println!("Part 1: {}", p1);
     println!("Part 2: {}", p2);
