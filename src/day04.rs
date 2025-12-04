@@ -30,9 +30,9 @@ fn count_adjacent_toilet_paper(grid: &Vec<Vec<String>>, current_row: i32, curren
 }
 
 pub fn run() {
-    let input = fs::read_to_string("inputs/day04_test.txt").expect("Failed to read input file");
+    let input = fs::read_to_string("inputs/day04.txt").expect("Failed to read input file");
     let mut p1 = 0;
-    let p2 = 0;
+    let mut p2 = 0;
     let mut grid = vec![];
     // We need to check each toilet paper (@) and see if it it has less than 4 adjacent toilet papers (8 adjacent spaces)
     for line in input.lines() {
@@ -56,6 +56,25 @@ pub fn run() {
                 let adjacent = count_adjacent_toilet_paper(&grid, row as i32, col as i32);
                 if adjacent < 4 {
                     p1 += 1;
+                }
+            }
+        }
+    }
+    for r in 0..grid.len() {
+        for c in 0..grid[r].len() {
+            for row in 0..grid.len() {
+                for col in 0..grid[row].len() {
+                    let chr = &grid[row][col];
+                    let is_toilet_paper = chr == "@";
+                    // Now we need to check the 8 immediate adjacent spaces to see if there are less than 4 adjacent toilet papers
+                    if is_toilet_paper {
+                        let adjacent = count_adjacent_toilet_paper(&grid, row as i32, col as i32);
+                        if adjacent < 4 {
+                            p2 += 1;
+                            // They accessed this roll of toilet paper, we can now remove it
+                            grid[row][col] = "x".to_string();
+                        }
+                    }
                 }
             }
         }
