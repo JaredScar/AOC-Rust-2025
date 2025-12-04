@@ -60,20 +60,19 @@ pub fn run() {
             }
         }
     }
-    for r in 0..grid.len() {
-        for c in 0..grid[r].len() {
-            for row in 0..grid.len() {
-                for col in 0..grid[row].len() {
-                    let chr = &grid[row][col];
-                    let is_toilet_paper = chr == "@";
-                    // Now we need to check the 8 immediate adjacent spaces to see if there are less than 4 adjacent toilet papers
-                    if is_toilet_paper {
-                        let adjacent = count_adjacent_toilet_paper(&grid, row as i32, col as i32);
-                        if adjacent < 4 {
-                            p2 += 1;
-                            // They accessed this roll of toilet paper, we can now remove it
-                            grid[row][col] = "x".to_string();
-                        }
+    // Part 2: Count accessible rolls (iterating until no more changes)
+    let mut changed = true;
+    while changed {
+        changed = false;
+        for row in 0..grid.len() {
+            for col in 0..grid[row].len() {
+                if grid[row][col] == "@" {
+                    let adjacent = count_adjacent_toilet_paper(&grid, row as i32, col as i32);
+                    if adjacent < 4 {
+                        p2 += 1;
+                        // They accessed this roll of toilet paper, we can now remove it
+                        grid[row][col] = "x".to_string();
+                        changed = true;
                     }
                 }
             }
