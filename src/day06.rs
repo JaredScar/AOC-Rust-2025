@@ -1,7 +1,7 @@
 use std::fs;
 
 pub fn run() {
-    let input = fs::read_to_string("inputs/day06.txt").expect("Failed to read input file");
+    let input = fs::read_to_string("inputs/day06_test.txt").expect("Failed to read input file");
     let mut p1 = 0;
     let mut p2 = 0;
     let lines: Vec<&str> = input.lines().collect();
@@ -35,6 +35,16 @@ pub fn run() {
         }
     }
     p1 = results.iter().sum();
+
+    for ind in 0..ops.len() {
+        let op = &ops[ind];
+        let col_nums: Vec<String> = grid.iter().map(|row| row[ind].to_string()).collect();
+        for j in 0..col_nums.len() {
+            let num = &col_nums[j];
+            println!("{}", num);
+        }
+        println!("--------------------------------");
+    }
     
     println!("Part 1: {}", p1);
     println!("Part 2: {}", p2);
